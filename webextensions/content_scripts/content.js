@@ -372,17 +372,20 @@ function updateProgress() {
   gProgressIndicator.setAttribute('title', browser.i18n.getMessage('menu_waiting_label', [gMatchAllProgress]));
 }
 
-window.addEventListener('dblclick', onDblClick, { capture: true });
-window.addEventListener('keyup', onKeyUp, { capture: true });
-window.addEventListener('selectionchange', onSelectionChange, { capture: true });
-window.addEventListener('focus', onFocused, { capture: true });
-browser.runtime.onMessage.addListener(onMessage);
+if (window.location.href.match(new RegExp('^https?://twitter.com'))) {
+  console.log('TextLink: disabled on Twitter');
+} else {
+  window.addEventListener('dblclick', onDblClick, { capture: true });
+  window.addEventListener('keyup', onKeyUp, { capture: true });
+  window.addEventListener('selectionchange', onSelectionChange, { capture: true });
+  window.addEventListener('focus', onFocused, { capture: true });
+  browser.runtime.onMessage.addListener(onMessage);
 
-window.addEventListener('unload', () => {
-  window.removeEventListener('dblclick', onDblClick, { capture: true });
-  window.removeEventListener('keyup', onKeyUp, { capture: true });
-  window.removeEventListener('selectionchange', onSelectionChange, { capture: true });
-  window.removeEventListener('focus', onFocused, { capture: true });
-  browser.runtime.onMessage.removeListener(onMessage);
-}, { once: true });
-
+  window.addEventListener('unload', () => {
+    window.removeEventListener('dblclick', onDblClick, { capture: true });
+    window.removeEventListener('keyup', onKeyUp, { capture: true });
+    window.removeEventListener('selectionchange', onSelectionChange, { capture: true });
+    window.removeEventListener('focus', onFocused, { capture: true });
+    browser.runtime.onMessage.removeListener(onMessage);
+  }, { once: true });
+}
